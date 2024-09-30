@@ -1,0 +1,8 @@
+[package]
+name = "gpt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+byteorder = { version = "1", default-features = false }
+log = "0.4.22"
