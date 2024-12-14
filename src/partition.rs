@@ -72,11 +72,11 @@ impl Display for Partition {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(
             f,
-            "Partition Entry{{\n
-            \tpartition type guid:{},\n
-            \tpartition guid: {},\n
-            \tstart_lba: {},\n
-            \tend_lba: {},\n
+            "Partition Entry {{\n
+            \tpartition type guid:{},
+            \tpartition guid: {},
+            \tstart_lba: {},
+            \tend_lba: {},
             \tname: {},\n}}",
             self.part_type_guid, self.part_guid, self.start_lba, self.end_lba, self.name
         )
