@@ -61,13 +61,13 @@ impl GptLayout {
 
     pub fn init_partition(&mut self, blk: &[u8], entry_index: usize) {
         if let Some(part) = Partition::deserialize(blk) {
-            self.partitions.push((part, entry_index - 1));
+            self.partitions.push((part, entry_index));
         }
     }
 
     pub fn init_backup_partition(&mut self, blk: &[u8], entry_index: usize) {
         if let Some(part) = Partition::deserialize(blk) {
-            self.backup_partitions.push((part, entry_index - 1));
+            self.backup_partitions.push((part, entry_index));
         }
     }
 }
@@ -81,34 +81,18 @@ impl GptLayout {
         unsafe { self.primary_header.as_ref().assume_init_ref() }
     }
     pub fn partition(&self, part_index: usize) -> Option<&Partition> {
-        assert!(part_index < MIN_PARTITION_NUM);
-        let mut find_index = PARTITION_LBA_SIZE;
-        for (i, (_, part_i)) in self.partitions.iter().enumerate() {
-            if *part_i == part_index {
-                find_index = i;
-                break;
-            }
-        }
-        if find_index != PARTITION_LBA_SIZE {
-            Some(&self.partitions.get(find_index).unwrap().0)
-        } else {
-            None
-        }
+        assert!(part_index <= MIN_PARTITION_NUM);
+        self.partitions
+            .iter()
+            .find(|(_, index)| *index == part_index)
+            .map(|(part, _)| part)
     }
     pub fn backup_partition(&self, part_index: usize) -> Option<&Partition> {
         assert!(part_index < MIN_PARTITION_NUM);
-        let mut find_index = PARTITION_LBA_SIZE;
-        for (i, (_, part_i)) in self.backup_partitions.iter().enumerate() {
-            if *part_i == part_index {
-                find_index = i;
-                break;
-            }
-        }
-        if find_index != PARTITION_LBA_SIZE {
-            Some(&self.backup_partitions.get(find_index).unwrap().0)
-        } else {
-            None
-        }
+        self.backup_partitions
+            .iter()
+            .find(|(_, index)| *index == part_index)
+            .map(|(part, _)| part)
     }
     pub fn backup_header(&self) -> &Header {
         unsafe { self.backup_header.as_ref().assume_init_ref() }
@@ -124,33 +108,17 @@ impl GptLayout {
     }
     pub fn partition_mut(&mut self, part_index: usize) -> Option<&mut Partition> {
         assert!(part_index < MIN_PARTITION_NUM);
-        let mut find_index = PARTITION_LBA_SIZE;
-        for (i, (_, part_i)) in self.partitions.iter().enumerate() {
-            if *part_i == part_index {
-                find_index = i;
-                break;
-            }
-        }
-        if find_index != PARTITION_LBA_SIZE {
-            Some(&mut self.partitions.get_mut(find_index).unwrap().0)
-        } else {
-            None
-        }
+        self.partitions
+            .iter_mut()
+            .find(|(_, index)| *index == part_index)
+            .map(|(part, _)| part)
     }
     pub fn backup_partition_mut(&mut self, part_index: usize) -> Option<&mut Partition> {
         assert!(part_index < MIN_PARTITION_NUM);
-        let mut find_index = PARTITION_LBA_SIZE;
-        for (i, (_, part_i)) in self.backup_partitions.iter().enumerate() {
-            if *part_i == part_index {
-                find_index = i;
-                break;
-            }
-        }
-        if find_index != PARTITION_LBA_SIZE {
-            Some(&mut self.backup_partitions.get_mut(find_index).unwrap().0)
-        } else {
-            None
-        }
+        self.backup_partitions
+            .iter_mut()
+            .find(|(_, index)| *index == part_index)
+            .map(|(part, _)| part)
     }
     pub fn backup_header_mut(&mut self) -> &mut Header {
         unsafe { self.backup_header.as_mut().assume_init_mut() }
