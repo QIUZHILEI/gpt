@@ -102,19 +102,20 @@ impl Display for Header {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(
             f,
-            "Header{{\n 
-            \trevision: {}.{},\n
-            \theader_size: {},\n
-            \tcrc32: {},\n
-            \tmy_lba: {},\n
-            \tbackup_lba: {},\n
-            \tfirst_usable: {},\n
-            \tlast_usable: {},\n
-            \tdisk_guid: {},\n
-            \tpart_start: {},\n
-            \tnum_parts: {},\n
-            \tpart_size: {},\n
-            \tcrc32_parts: {},\n}}",
+            "Header{{
+            \trevision: {}.{},
+            \theader_size: {},
+            \tcrc32: {},
+            \tmy_lba: {},
+            \tbackup_lba: {},
+            \tfirst_usable: {},
+            \tlast_usable: {},
+            \tdisk_guid: {},
+            \tpart_start: {},
+            \tnum_parts: {},
+            \tpart_size: {},
+            \tcrc32_parts: {}
+            }}",
             self.revision.0,
             self.revision.1,
             self.header_size,
